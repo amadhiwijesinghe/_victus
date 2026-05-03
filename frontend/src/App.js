@@ -1,173 +1,134 @@
-import { useEffect, useState } from "react";
+import React from "react";
+import { motion } from "framer-motion";
 
 function App() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    fetch("https://your-app.up.railway.app/products")
-      .then(res => res.json())
-      .then(data => setProducts(data))
-      .catch(err => console.log(err));
-  }, []);
-
-  const scrollToProducts = () => {
-    document.getElementById("products").scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <div style={{
-      background: "#0a0a0a",
-      minHeight: "100vh",
-      color: "#fff",
-      fontFamily: "sans-serif"
-    }}>
+    <div style={{ background: "#111", color: "white", fontFamily: "Arial, sans-serif" }}>
 
-      {/* 🔥 HERO */}
-      <div style={{
-        height: "100vh",
-        backgroundImage: "url('https://images.unsplash.com/photo-1523398002811-999ca8dec234')",
-        backgroundSize: "cover",
-        backgroundPosition: "50% 30%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center"
-      }}>
-        <div style={{
-          backdropFilter: "blur(10px)",
-          background: "rgba(0,0,0,0.5)",
-          padding: "40px",
-          borderRadius: "15px"
-        }}>
-          <h1 style={{
-            fontSize: "70px",
-            letterSpacing: "4px",
-            marginBottom: "10px"
-          }}>
+      {/* 🔥 HERO SECTION */}
+      <div
+        style={{
+          height: "100vh",
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1523398002811-999ca8dec234')",
+          backgroundSize: "cover",
+          backgroundPosition: "50% 20%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          position: "relative",
+        }}
+      >
+
+        {/* 🔥 DARK OVERLAY */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background:
+              "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8))",
+          }}
+        />
+
+        {/* 🔥 CONTENT */}
+        <motion.div
+          style={{ position: "relative", zIndex: 1 }}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <h1
+            style={{
+              fontSize: "clamp(40px, 8vw, 90px)",
+              letterSpacing: "8px",
+              fontWeight: "800",
+              margin: 0,
+            }}
+          >
             VICTUS
           </h1>
 
-          <p style={{
-            fontSize: "18px",
-            opacity: 0.8,
-            marginBottom: "25px"
-          }}>
-            WEAR YOUR VICTORY.
+          <p
+            style={{
+              marginTop: "10px",
+              fontSize: "18px",
+              opacity: 0.8,
+              letterSpacing: "2px",
+            }}
+          >
+            WEAR YOUR VICTORY
           </p>
 
+          {/* 🔥 CTA BUTTON */}
           <button
-            onClick={scrollToProducts}
             style={{
+              marginTop: "30px",
               padding: "12px 30px",
-              background: "#fff",
-              color: "#000",
+              background: "white",
+              color: "black",
               border: "none",
-              borderRadius: "30px",
-              fontWeight: "bold",
+              fontWeight: "600",
+              letterSpacing: "2px",
               cursor: "pointer",
-              transition: "0.3s"
+              transition: "0.3s",
             }}
-            onMouseOver={e => e.target.style.transform = "scale(1.1)"}
-            onMouseOut={e => e.target.style.transform = "scale(1)"}
+            onMouseOver={(e) => (e.target.style.background = "#ddd")}
+            onMouseOut={(e) => (e.target.style.background = "white")}
           >
             SHOP NOW
           </button>
-        </div>
+        </motion.div>
       </div>
 
-      {/* 🛍 PRODUCTS */}
-      <div id="products" style={{
-        padding: "50px 20px",
-        maxWidth: "1200px",
-        margin: "0 auto"
-      }}>
-
-        <h2 style={{
-          textAlign: "center",
-          fontSize: "30px",
-          marginBottom: "40px",
-          letterSpacing: "2px"
-        }}>
-          DROP COLLECTION
+      {/* 🔥 SIMPLE PRODUCT SECTION (STARTER) */}
+      <div style={{ padding: "60px 20px", textAlign: "center" }}>
+        <h2 style={{ marginBottom: "30px", letterSpacing: "3px" }}>
+          FEATURED PRODUCTS
         </h2>
 
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "25px"
-        }}>
-          {products.map(p => (
-            <div key={p.id} style={{
-              background: "#111",
-              borderRadius: "15px",
-              overflow: "hidden",
-              transition: "0.3s",
-              cursor: "pointer"
-            }}
-            onMouseOver={e => e.currentTarget.style.transform = "translateY(-10px)"}
-            onMouseOut={e => e.currentTarget.style.transform = "translateY(0)"}
-            >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "30px",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* Product Card */}
+          <div style={{ width: "250px" }}>
+            <img
+              src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+              alt="product"
+              style={{ width: "100%", borderRadius: "10px" }}
+            />
+            <h3>Black Tee</h3>
+            <p>$29.99</p>
+          </div>
 
-              <img
-                src={p.image || "https://via.placeholder.com/300"}
-                alt=""
-                style={{
-                  width: "100%",
-                  height: "280px",
-                  objectFit: "cover"
-                }}
-              />
+          <div style={{ width: "250px" }}>
+            <img
+              src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c"
+              alt="product"
+              style={{ width: "100%", borderRadius: "10px" }}
+            />
+            <h3>Hoodie</h3>
+            <p>$49.99</p>
+          </div>
 
-              <div style={{ padding: "15px" }}>
-                <h3 style={{ marginBottom: "5px" }}>{p.name}</h3>
-
-                <p style={{
-                  color: "#aaa",
-                  fontSize: "14px"
-                }}>
-                  {p.description}
-                </p>
-
-                <p style={{
-                  marginTop: "10px",
-                  fontWeight: "bold"
-                }}>
-                  LKR {p.price}
-                </p>
-
-                <button
-                  style={{
-                    marginTop: "10px",
-                    width: "100%",
-                    padding: "10px",
-                    background: "#fff",
-                    color: "#000",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer"
-                  }}
-                  onClick={() => {
-                    const msg = `I want to buy ${p.name} for LKR ${p.price}`;
-                    window.open(`https://wa.me/947XXXXXXXX?text=${encodeURIComponent(msg)}`);
-                  }}
-                >
-                  BUY NOW
-                </button>
-              </div>
-
-            </div>
-          ))}
+          <div style={{ width: "250px" }}>
+            <img
+              src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"
+              alt="product"
+              style={{ width: "100%", borderRadius: "10px" }}
+            />
+            <h3>Cap</h3>
+            <p>$19.99</p>
+          </div>
         </div>
-      </div>
-
-      {/* ⚡ FOOTER */}
-      <div style={{
-        textAlign: "center",
-        padding: "20px",
-        opacity: 0.5,
-        fontSize: "12px"
-      }}>
-        © VICTUS — Wear Your Strength
       </div>
 
     </div>
