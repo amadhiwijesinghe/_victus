@@ -26,6 +26,13 @@ db.connect((err) => {
 });
 
 
+app.get("/products", (req, res) => {
+  db.query("SELECT * FROM products", (err, result) => {
+    if (err) return res.json(err);
+    res.json(result);
+  });
+});
+
 // ✅ ADD YOUR ROOT ROUTE HERE
 app.get("/", (req, res) => {
   res.send("VICTUS Backend Running 🚀");
