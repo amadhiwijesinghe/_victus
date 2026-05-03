@@ -1,7 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://victus-production.up.railway.app/products") // ← your backend URL
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div style={{ background: "#111", color: "white", fontFamily: "Arial, sans-serif" }}>
 
@@ -78,6 +89,9 @@ function App() {
             }}
             onMouseOver={(e) => (e.target.style.background = "#ddd")}
             onMouseOut={(e) => (e.target.style.background = "white")}
+            onClick={() => {
+              document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+            }}
           >
             SHOP NOW
           </button>
@@ -99,34 +113,32 @@ function App() {
           }}
         >
           {/* Product Card */}
-          <div style={{ width: "250px" }}>
-            <img
-              src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
-              alt="product"
-              style={{ width: "100%", borderRadius: "10px" }}
-            />
-            <h3>Black Tee</h3>
-            <p>$29.99</p>
-          </div>
+          <div id="products" style={{ padding: "60px 20px", textAlign: "center" }}>
+            <h2 style={{ marginBottom: "30px", letterSpacing: "3px" }}>
+              FEATURED PRODUCTS
+            </h2>
 
-          <div style={{ width: "250px" }}>
-            <img
-              src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c"
-              alt="product"
-              style={{ width: "100%", borderRadius: "10px" }}
-            />
-            <h3>Hoodie</h3>
-            <p>$49.99</p>
-          </div>
-
-          <div style={{ width: "250px" }}>
-            <img
-              src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"
-              alt="product"
-              style={{ width: "100%", borderRadius: "10px" }}
-            />
-            <h3>Cap</h3>
-            <p>$19.99</p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "30px",
+                maxWidth: "1200px",
+                margin: "0 auto",
+              }}
+            >
+              {products.map((p) => (
+                <div key={p.id}>
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    style={{ width: "100%", borderRadius: "10px" }}
+                  />
+                  <h3>{p.name}</h3>
+                  <p>LKR {p.price}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
