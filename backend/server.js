@@ -24,6 +24,10 @@ db.connect((err) => {
   console.log("Connected to MySQL ✅");
 });
 
+app.get("/", (req, res) => {
+  res.send("VICTUS backend running 🚀");
+});
+
 app.get("/products", (req, res) => {
   db.query("SELECT * FROM products", (err, result) => {
     if (err) return res.json(err);
@@ -31,6 +35,8 @@ app.get("/products", (req, res) => {
   });
 });
 
-app.listen(5000, () => {
-  console.log("Server running...");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
