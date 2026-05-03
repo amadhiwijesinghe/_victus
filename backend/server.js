@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ✅ DB connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -24,17 +25,18 @@ db.connect((err) => {
   console.log("Connected to MySQL ✅");
 });
 
+
+// ✅ ADD YOUR ROOT ROUTE HERE
 app.get("/", (req, res) => {
-  res.send("VICTUS backend running 🚀");
+  res.send("VICTUS Backend Running 🚀");
 });
 
-app.get("/products", (req, res) => {
-  db.query("SELECT * FROM products", (err, result) => {
-    if (err) return res.json(err);
-    res.json(result);
-  });
-});
 
+// (your other routes go here)
+// app.get("/products", ...)
+
+
+// ✅ START SERVER (always at bottom)
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
