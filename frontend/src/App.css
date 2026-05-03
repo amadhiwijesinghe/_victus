@@ -1,38 +1,163 @@
-.App {
+/* 🌌 GLOBAL */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #111, #000);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* 🔥 HERO */
+.hero {
+  height: 100vh;
+  background: url("https://images.unsplash.com/photo-1523398002811-999ca8dec234") center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background-position: 50% 20%;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9));
+}
+
+/* 🌈 GLOW TEXT */
+.logo {
+  font-size: clamp(50px, 9vw, 110px);
+  letter-spacing: 10px;
+  font-weight: 900;
+  color: white;
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.3),
+    0 0 40px rgba(255,255,255,0.2),
+    0 0 80px rgba(255,255,255,0.1);
+}
+
+/* ✨ SUB TEXT */
+.subtitle {
+  opacity: 0.8;
+  letter-spacing: 2px;
+  margin-top: 10px;
+}
+
+/* 💎 BUTTON */
+.btn {
+  margin-top: 30px;
+  padding: 14px 34px;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #fff, #aaa);
+  color: black;
+
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255,255,255,0.4);
+}
+
+/* 🔥 PRODUCT SECTION */
+.section {
+  padding: 80px 20px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.title {
+  letter-spacing: 4px;
+  margin-bottom: 40px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* 🧊 GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* 💎 CARD */
+.card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
+  transition: 0.4s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 0 30px rgba(255,255,255,0.15);
+}
+
+/* 🖼 IMAGE HOVER */
+.card img {
+  width: 100%;
+  border-radius: 15px;
+  transition: 0.4s;
+}
+
+.card:hover img {
+  transform: scale(1.1);
+}
+
+/* ➕ ADD BUTTON */
+.add-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+
+  background: rgba(255,255,255,0.1);
   color: white;
+
+  transition: 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.add-btn:hover {
+  background: white;
+  color: black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 🌈 FLOATING GLOW */
+.glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15), transparent);
+  filter: blur(80px);
+  top: 20%;
+  left: 10%;
+}
+
+/* cart */
+.cart-bubble {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  z-index: 9999;
+
+  transition: 0.3s;
+}
+
+.cart-bubble:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
 }
