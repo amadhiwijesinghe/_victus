@@ -17,28 +17,30 @@ function App() {
         {/* STORE PAGE */}
         <Route path="/" element={<Store />} />
 
+        {/* ADMIN LOGIN PAGE */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+
         {/* ADMIN PAGE */}
         <Route path="/admin" element={
           <ProtectedRoute>
             <Admin />
           </ProtectedRoute>} />
 
-        {/* ADMIN LOGIN PAGE */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
-
         {/* ADMIN PRODUCT PAGE */}
         <Route path="/admin/products" element={
           <ProtectedRoute>
             <ProductsAdmin />
           </ProtectedRoute>} />
+
+         {/* 🔥 IMPORTANT: 404 */}
+        <Route
+          path="*"
+          element={
+            <h1 style={{ color: "white", textAlign: "center", marginTop: "100px" }}>
+              404 - Page Not Found
+            </h1>
+          }
+        />
       </Routes>
     </BrowserRouter>
 
