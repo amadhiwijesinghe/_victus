@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -12,25 +11,61 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("https://victus-production.up.railway.app/products") // ← your backend URL
+      .get("https://victus-production.up.railway.app/products")
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
   }, []);
-  return (
-  <div>
 
+  return (
+  <div style={{ fontFamily: "Outfit, sans-serif", background: "#000", color: "#fff" }}>
+
+    {/* 🛒 FLOATING CART */}
     <div
-      className="cart-bubble"
+      style={{
+        position: "fixed",
+        top: "20px",
+        right: "20px",
+        background: "linear-gradient(135deg,#00ffcc,#00aaff)",
+        padding: "10px 16px",
+        borderRadius: "30px",
+        color: "#000",
+        fontWeight: "700",
+        boxShadow: "0 0 25px rgba(0,255,204,0.6)",
+        cursor: "pointer",
+        zIndex: 3000
+      }}
       onClick={() => setCartOpen(true)}
     >
       🛒 {cart.reduce((total, item) => total + item.qty, 0)}
     </div>
 
 
-    {/* HERO */}
-    <div className="hero">
+    {/* 🔥 HERO */}
+    <div
+      style={{
+        height: "100vh",
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1523398002811-999ca8dec234')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        position: "relative"
+      }}
+    >
 
-      <div className="glow"></div>
+      {/* DARK + GLOW OVERLAY */}
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.9))"
+        }}
+      />
 
       <motion.div
         style={{ position: "relative", zIndex: 1 }}
@@ -38,12 +73,43 @@ function App() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <h1 className="logo">VICTUS</h1>
+        <h1
+          style={{
+            fontSize: "clamp(60px, 10vw, 120px)",
+            fontWeight: "900",
+            letterSpacing: "10px",
+            background: "linear-gradient(90deg,#00ffcc,#00aaff)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            textShadow: "0 0 40px rgba(0,255,204,0.4)"
+          }}
+        >
+          VICTUS
+        </h1>
 
-        <p className="subtitle">WEAR YOUR VICTORY</p>
+        <p style={{
+          letterSpacing: "3px",
+          opacity: 0.8,
+          fontSize: "14px"
+        }}>
+          WEAR YOUR VICTORY
+        </p>
 
         <button
-          className="btn"
+          style={{
+            marginTop: "30px",
+            padding: "14px 40px",
+            background: "linear-gradient(135deg,#00ffcc,#00aaff)",
+            border: "none",
+            borderRadius: "30px",
+            fontWeight: "700",
+            letterSpacing: "2px",
+            cursor: "pointer",
+            boxShadow: "0 0 25px rgba(0,255,204,0.5)",
+            transition: "0.3s"
+          }}
+          onMouseEnter={(e) => e.target.style.transform = "scale(1.1)"}
+          onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
           onClick={() => {
             document.getElementById("products").scrollIntoView({ behavior: "smooth" });
           }}
@@ -53,23 +119,61 @@ function App() {
       </motion.div>
     </div>
 
-    {/* PRODUCTS */}
-    <div id="products" className="section">
-      <h2 className="title">FEATURED PRODUCTS</h2>
 
-      <div className="grid">
+    {/* 🛍 PRODUCTS */}
+    <div id="products" style={{ padding: "60px 20px" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "40px", letterSpacing: "2px" }}>
+        FEATURED PRODUCTS
+      </h2>
+
+      <div style={{ display: "flex", gap: "25px", flexWrap: "wrap", justifyContent: "center" }}>
         {products.map((p) => (
-          <div className="card" key={p.id}>
-            <img src={p.image} alt={p.name} />
+          <div
+            key={p.id}
+            style={{
+              width: "250px",
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(15px)",
+              borderRadius: "20px",
+              padding: "15px",
+              border: "1px solid rgba(0,255,204,0.1)",
+              transition: "0.3s",
+              cursor: "pointer"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-10px)";
+              e.currentTarget.style.boxShadow = "0 15px 40px rgba(0,255,204,0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            <img src={p.image} alt="" style={{ width: "100%", borderRadius: "12px" }} />
 
-            <h3>{p.name}</h3>
-            <p>LKR {p.price}</p>
+            <h3 style={{ fontWeight: "700", letterSpacing: "1px", fontSize: "16px" }}>
+              {p.name}
+            </h3>
+
+            <p style={{ opacity: 0.6, fontSize: "14px" }}>
+              LKR {p.price}
+            </p>
 
             <button
-              className="add-btn"
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "linear-gradient(135deg,#00ffcc,#00aaff)",
+                border: "none",
+                borderRadius: "12px",
+                color: "#000",
+                fontWeight: "700",
+                letterSpacing: "1px",
+                cursor: "pointer",
+                boxShadow: "0 0 15px rgba(0,255,204,0.3)"
+              }}
               onClick={() => {
                 const existing = cart.find(item => item.id === p.id);
-
                 if (existing) {
                   setCart(cart.map(item =>
                     item.id === p.id
@@ -81,161 +185,246 @@ function App() {
                 }
               }}
             >
-              Add to Cart
+              ADD TO CART
             </button>
           </div>
         ))}
       </div>
-
-      <button
-        className="btn"
-        style={{ marginTop: "40px", opacity: cart.length === 0 ? 0.5 : 1 }}
-        disabled={cart.length === 0}
-        onClick={() => {
-          if (cart.length === 0) return;
-
-          const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-
-          const text =
-            `VICTUS Order:\n` +
-            cart
-              .map(item => `${item.name} x${item.qty} - LKR ${item.price}`)
-              .join("\n") +
-            `\n\nTotal: LKR ${total}`;
-
-          const url = `https://wa.me/94712345678?text=${encodeURIComponent(text)}`;
-
-          window.open(url, "_blank");
-          setCart([]);
-        }}
-      >
-        Order via WhatsApp
-      </button>
     </div>
 
-  {cartOpen && (
+    {/* ⚫ OVERLAY */}
+    {cartOpen && (
+      <div
+        onClick={() => setCartOpen(false)}
+        style={{
+          position: "fixed",
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.6)",
+          top: 0,
+          left: 0,
+          zIndex: 1500
+        }}
+      />
+    )}
+
+    {/* 🛒 CART PANEL */}
     <div
-      onClick={() => setCartOpen(false)}
       style={{
         position: "fixed",
         top: 0,
-        left: 0,
-        width: "100%",
+        right: cartOpen ? "0" : "-360px",
+        width: "360px",
         height: "100%",
-        background: "rgba(0,0,0,0.6)",
-        zIndex: 1500
+        background: "linear-gradient(180deg, rgba(10,10,10,0.95), rgba(0,0,0,0.98))",
+        borderLeft: "1px solid rgba(0,255,204,0.15)",
+        color: "#fff",
+        transition: "0.4s cubic-bezier(0.77, 0, 0.18, 1)",
+        zIndex: 2000,
+        display: "flex",
+        flexDirection: "column",
+        boxShadow: "-10px 0 40px rgba(0,0,0,0.9), -2px 0 10px rgba(0,255,204,0.2)",
       }}
-    />
-  )}
+    >
 
-  {/* 🛒 CART PANEL */}
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      right: cartOpen ? "0" : "-420px",
-      width: "360px",
-      height: "100%",
-      backdropFilter: "blur(20px)",
-      background: "rgba(20,20,20,0.85)",
-      borderLeft: "1px solid rgba(255,255,255,0.1)",
-      color: "#fff",
-      padding: "0px",
-      transition: "0.4s cubic-bezier(0.77, 0, 0.18, 1)",
-      zIndex: 2000,
-      display: "flex",
-      flexDirection: "column",
-      boxShadow: "-10px 0 40px rgba(0,0,0,0.8)"
-    }}
-  >
-
-  {/* HEADER */}
-  <div className="cart-header" style={{ padding: "20px" }}>
-    <h2 style={{ letterSpacing: "1px" }}>
-      🛒 Your Cart
-    </h2>
-    <button className="close-btn" onClick={() => setCartOpen(false)}>✕</button>
-  </div>
-
-  {/* ITEMS */}
-  <div
-    style={{
-      flex: 1,
-      overflowY: "auto",
-      marginTop: "10px",
-      paddingRight: "5px",
-      padding: "0 20px"
-    }}
-  >
-    {cart.length === 0 ? (
-      <p>Cart is empty</p>
-    ) : (
-      cart.map(item => (
-        <div
-          key={item.id}
+      {/* HEADER */}
+      <div style={{ padding: "20px", display: "flex", justifyContent: "space-between" }}>
+        <h2
           style={{
-            transition: "0.2s",
-            cursor: "pointer",
-            marginBottom: "15px",
-            padding: "10px",
-            borderRadius: "10px",
-            background: "rgba(255,255,255,0.05)"
+            fontWeight: "800",
+            letterSpacing: "1.5px",
+            background: "linear-gradient(90deg,#00ffcc,#00aaff)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
           }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.03)"}
-          onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
         >
-          <div>
-            <h4>{item.name}</h4>
-            <p>{item.qty} × LKR {item.price}</p>
-          </div>
-
-          <div>
-            LKR {item.price * item.qty}
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-
-  {/* FOOTER */}
-  {cart.length > 0 && (
-    <div
-    style={{
-      borderTop: "1px solid rgba(255,255,255,0.1)",
-      paddingTop: "15px",
-      marginTop: "10px",
-      padding: "20px"
-    }}
-  >
-      <div className="cart-total">
-        <span>Total</span>
-        <span style={{ color: "#00ffcc" }}>
-          LKR {cart.reduce((sum, item) => sum + item.price * item.qty, 0)}
-        </span>
+          Your Cart
+        </h2>
+        <button
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            border: "none",
+            borderRadius: "8px",
+            color: "#fff",
+            width: "30px",
+            height: "30px",
+            cursor: "pointer"
+          }}
+          onClick={() => setCartOpen(false)}
+        >
+          ✕
+        </button>
       </div>
 
-      <button
-        style={{
-          width: "100%",
-          padding: "14px",
-          background: "linear-gradient(135deg, #00ffcc, #00aaff)",
-          border: "none",
-          color: "#000",
-          fontWeight: "bold",
-          borderRadius: "10px",
-          cursor: "pointer",
-          transition: "0.3s"
-        }}
-        onMouseEnter={(e) => e.target.style.opacity = "0.8"}
-        onMouseLeave={(e) => e.target.style.opacity = "1"}
-      >
-        🚀 Checkout
-      </button>
-    </div>
-  )}
+      {/* ITEMS */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "0 20px" }}>
+        {cart.length === 0 ? (
+          <p>Cart is empty</p>
+        ) : (
+          cart.map(item => (
+            <div
+              key={item.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "15px",
+                padding: "14px",
+                borderRadius: "12px",
+                background: "rgba(255,255,255,0.06)",
+                backdropFilter: "blur(10px)",
+                transition: "0.25s",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.4)"
 
-</div>
+                
+              }}
+
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 0 20px rgba(0,255,204,0.3)";
+              }}
+
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.4)";
+              }}
+            >
+                        
+
+              {/* LEFT */}
+              <div>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <img
+                    src={item.image}
+                    alt=""
+                    style={{
+                      width: "60px",
+                      height: "60px",
+                      borderRadius: "8px",
+                      objectFit: "cover"
+                    }}
+                  />
+
+                  <div>
+                    <h4 style={{ margin: 0, fontWeight: "700" }}>{item.name}</h4>
+                    <p style={{ fontSize: "12px", opacity: 0.6 }}>
+                      LKR {item.price}
+                    </p>
+                  </div>
+                </div>
+
+                {/* ➕➖ */}
+                <div style={{ display: "flex", gap: "10px", marginTop: "8px", alignItems: "center" }}>
+  
+                  <button
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: "rgba(255,255,255,0.1)",
+                      color: "#fff",
+                      fontWeight: "700",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => {
+                      setCart(cart.map(i =>
+                        i.id === item.id
+                          ? { ...i, qty: Math.max(1, i.qty - 1) }
+                          : i
+                      ));
+                    }}
+                  >
+                    –
+                  </button>
+
+                  <span style={{ fontWeight: "600" }}>{item.qty}</span>
+
+                  <button
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: "linear-gradient(135deg,#00ffcc,#00aaff)",
+                      color: "#000",
+                      fontWeight: "700",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => {
+                      setCart(cart.map(i =>
+                        i.id === item.id
+                          ? { ...i, qty: i.qty + 1 }
+                          : i
+                      ));
+                    }}
+                  >
+                    +
+                  </button>
+
+                </div>
+              </div>
+
+              {/* RIGHT */}
+              <div style={{ textAlign: "right" }}>
+                <strong>LKR {item.price * item.qty}</strong>
+
+                <div>
+                  <button
+                    style={{
+                      color: "#ff4d4d",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => {
+                      setCart(cart.filter(i => i.id !== item.id));
+                    }}
+                  >
+                    <span style={{ color: "#ff4d4d", fontSize: "12px" }}>
+                      remove
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* FOOTER */}
+      {cart.length > 0 && (
+        <div style={{ padding: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: "600" }}>Total</span>
+            <span style={{ color: "#00ffcc", fontWeight: "700" }}>
+              LKR {cart.reduce((sum, item) => sum + item.price * item.qty, 0)}
+            </span>
+          </div>
+
+          <button
+            style={{
+              width: "100%",
+              marginTop: "10px",
+              padding: "14px",
+              background: "linear-gradient(135deg,#00ffcc,#00aaff)",
+              border: "none",
+              borderRadius: "10px",
+              fontWeight: "700",
+              cursor: "pointer"
+            }}
+            
+            onMouseEnter={(e) => e.target.style.transform = "scale(1.03)"}
+            onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+          >
+            🚀 Checkout
+          </button>
+        </div>
+      )}
+
     </div>
+
+  </div>
 );
 }
 
