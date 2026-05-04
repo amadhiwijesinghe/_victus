@@ -8,13 +8,14 @@ function ProductsAdmin() {
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [colors, setColors] = useState("");
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     axios.get("https://victus-production.up.railway.app/products")
       .then(res => setProducts(res.data));
   }, []);
 
- const addProduct = async () => {
+const addProduct = async () => {
   if (!name || !price || !image) {
     alert("Fill all fields");
     return;
@@ -23,25 +24,49 @@ function ProductsAdmin() {
   const token = localStorage.getItem("token");
 
   try {
-    await axios.post(
-      "https://victus-production.up.railway.app/products",
-      {
-        name,
-        price,
-        image,
-        description,
-        colors: colors.split(",") // 🔥 IMPORTANT
-      },
-      {
-        headers: {
-          Authorization: token
+    if (editId) {
+      // 🔥 UPDATE MODE
+      await axios.put(
+        `https://victus-production.up.railway.app/products/${editId}`,
+        {
+          name,
+          price,
+          image,
+          description,
+          colors: colors.split(",").map(c => c.trim())
+        },
+        {
+          headers: {
+            Authorization: token
+          }
         }
-      }
-    );
+      );
 
-    alert("Product added ✅");
+      alert("Product updated ✅");
+      setEditId(null);
 
-    // reset fields
+    } else {
+      // ➕ ADD MODE
+      await axios.post(
+        "https://victus-production.up.railway.app/products",
+        {
+          name,
+          price,
+          image,
+          description,
+          colors: colors.split(",").map(c => c.trim())
+        },
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+      );
+
+      alert("Product added ✅");
+    }
+
+    // RESET
     setName("");
     setPrice("");
     setImage("");
@@ -53,7 +78,7 @@ function ProductsAdmin() {
 
   } catch (err) {
     console.log(err);
-    alert("Error adding product ❌");
+    alert("Error ❌");
   }
 };
 
@@ -132,8 +157,32 @@ function ProductsAdmin() {
 
 
         <button style={btnStyle} onClick={addProduct}>
-            ➕ Add Product
+            {editId ? "💾 Update Product" : "➕ Add Product"}
         </button>
+
+        {editId && (
+            <button
+                style={{
+                marginTop: "10px",
+                padding: "10px",
+                borderRadius: "8px",
+                border: "none",
+                background: "#444",
+                color: "#fff",
+                cursor: "pointer"
+                }}
+                onClick={() => {
+                setEditId(null);
+                setName("");
+                setPrice("");
+                setImage("");
+                setDescription("");
+                setColors("");
+                }}
+            >
+                Cancel Edit
+            </button>
+            )}
 
     </div>
 
@@ -141,7 +190,48 @@ function ProductsAdmin() {
       {products.map(p => (
         <div key={p.id}>
           <img src={p.image} width="50" alt="" />
-          <p>{p.name} - {p.price}</p>
+          <p>{p.name} - LKR {p.price}</p>
+          <p style={{ fontSize: "12px", opacity: 0.6 }}>
+            {p.description}
+          </p>
+
+          <div style={{ display: "flex", gap: "5px" }}>
+            {p.colors?.map((c, i) => (
+                <div
+                key={i}
+                style={{
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    backgroundImage: `url(${c})`,
+                    backgroundSize: "cover",
+                    border: "1px solid #fff"
+                }}
+                />
+            ))}
+            </div>
+
+          <button
+            style={{
+                marginRight: "10px",
+                padding: "6px 10px",
+                borderRadius: "6px",
+                border: "none",
+                background: "#ffaa00",
+                color: "#000",
+                cursor: "pointer"
+            }}
+            onClick={() => {
+                setEditId(p.id);
+                setName(p.name);
+                setPrice(p.price);
+                setImage(p.image);
+                setDescription(p.description || "");
+                setColors(p.colors?.join(",") || "");
+            }}
+            >
+            Edit
+            </button>
 
           <button onClick={async () => {
            const token = localStorage.getItem("token");
@@ -158,6 +248,7 @@ function ProductsAdmin() {
           }}>
             Delete
           </button>
+
         </div>
       ))}
     </div>
