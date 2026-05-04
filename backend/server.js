@@ -25,7 +25,7 @@ db.connect((err) => {
   console.log("Connected to MySQL ✅");
 });
 
-
+// PRODUCTS
 app.get("/products", (req, res) => {
   db.query("SELECT * FROM products", (err, result) => {
     if (err) return res.json(err);
@@ -33,14 +33,31 @@ app.get("/products", (req, res) => {
   });
 });
 
-// ✅ ADD YOUR ROOT ROUTE HERE
+
 app.get("/", (req, res) => {
   res.send("VICTUS Backend Running 🚀");
 });
 
 
-// (your other routes go here)
-// app.get("/products", ...)
+// ORDERS
+app.post("/orders", (req, res) => {
+  const { items, total, name, phone1, phone2, address } = req.body;
+
+  const query = `
+    INSERT INTO orders (items, total, name, phone1, phone2, address)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    query,
+    [JSON.stringify(items), total, name, phone1, phone2, address],
+    (err, result) => {
+      if (err) return res.status(500).send(err);
+      res.send("Order saved");
+    }
+  );
+});
+
 
 
 // ✅ START SERVER (always at bottom)

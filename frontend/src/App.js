@@ -9,6 +9,11 @@ function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
 
+  const [name, setName] = useState("");
+  const [phone1, setPhone1] = useState("");
+  const [phone2, setPhone2] = useState("");
+  const [address, setAddress] = useState("");
+
   useEffect(() => {
     axios
       .get("https://victus-production.up.railway.app/products")
@@ -474,6 +479,97 @@ function App() {
             </span>
           </div>
 
+          <hr style={{
+            border: "none",
+            height: "1px",
+            background: "rgba(255,255,255,0.1)",
+            margin: "15px 0"
+          }} />
+
+          <h4 style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            fontWeight: "700",
+            letterSpacing: "1px",
+            opacity: 0.8
+          }}>
+            CUSTOMER DETAILS
+          </h4>
+
+          <div style={{ marginTop: "15px" }}>
+            <input
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                padding: "12px",
+                borderRadius: "12px",
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+                outline: "none",
+                fontSize: "14px",
+                transition: "0.2s"
+              }}
+            />
+
+            <input
+              placeholder="Primary Phone"
+              value={phone1}
+              onChange={(e) => setPhone1(e.target.value)}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                padding: "12px",
+                borderRadius: "12px",
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+                outline: "none",
+                fontSize: "14px",
+                transition: "0.2s"
+              }}
+            />
+
+            <input
+              placeholder="Secondary Phone (optional)"
+              value={phone2}
+              onChange={(e) => setPhone2(e.target.value)}
+             style={{
+              width: "100%",
+              marginBottom: "10px",
+              padding: "12px",
+              borderRadius: "12px",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "#fff",
+              outline: "none",
+              fontSize: "14px",
+              transition: "0.2s"
+            }}
+            />
+
+            <textarea
+              placeholder="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                padding: "12px",
+                borderRadius: "12px",
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+                outline: "none",
+                fontSize: "14px",
+                transition: "0.2s"
+              }}
+            />
+          </div>
+
           <button
             style={{
               width: "100%",
@@ -483,17 +579,40 @@ function App() {
               border: "none",
               borderRadius: "10px",
               fontWeight: "700",
-              cursor: "pointer"
+              cursor: "pointer",
+              boxShadow: "0 0 25px rgba(0,255,204,0.4)",
+              letterSpacing: "1px",
+              fontSize: "14px"
             }}
 
             onMouseEnter={(e) => e.target.style.transform = "scale(1.03)"}
             onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
 
-             onClick={() => {
+             onClick={async () => {
               if (cart.length === 0) return;
+
+              if (!name || !phone1 || !address) {
+              alert("Please fill all required details");
+              return;
+            }
 
               const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
+              // 🔥 SAVE ORDER
+              try {
+                await axios.post("https://victus-production.up.railway.app/orders", {
+                  items: cart,
+                  total: total,
+                  name: name,
+                  phone1: phone1,
+                  phone2: phone2,
+                  address: address
+                });
+              } catch (err) {
+                console.log("Order save failed", err);
+              }
+
+              // WHATSAPP MESSAGE
               const text =
                 `VICTUS Order:\n\n` +
                 cart
@@ -501,9 +620,11 @@ function App() {
                   .join("\n") +
                 `\n\nTotal: LKR ${total}`;
 
-              const url = `https://wa.me/94761234567?text=${encodeURIComponent(text)}`;
+              const url = `https://wa.me/947XXXXXXXX?text=${encodeURIComponent(text)}`;
 
               window.open(url, "_blank");
+
+              setCart([]);
             }}
           >
             🚀 Checkout
