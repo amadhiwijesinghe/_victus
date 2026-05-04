@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import "../App.css";
 
+
 function Store() {
 
     const [products, setProducts] = useState([]);
@@ -15,6 +16,7 @@ function Store() {
     const [address, setAddress] = useState("");
 
     const [loaded, setLoaded] = useState(false);
+    const [hoverImg, setHoverImg] = useState({});
 
     useEffect(() => {
         axios
@@ -193,18 +195,47 @@ function Store() {
                       }}
                     >
                       <img 
-                        src={p.image} 
+                        src={hoverImg[p.id] || p.image} 
                         alt="" 
                         style={{ 
-                          width: "100%", 
-                          borderRadius: "12px",
-                          transition: "0.3s"
+                            width: "100%", 
+                            borderRadius: "12px",
+                            transition: "0.3s"
                         }} 
-                      />
+                        />
 
                       <h3 style={{ fontWeight: "700", letterSpacing: "1px", fontSize: "16px" }}>
                         {p.name}
                       </h3>
+
+                      <p style={{ fontSize: "12px", opacity: 0.6 }}>
+                        {p.description}
+                      </p>
+
+                      <div style={{ display: "flex", gap: "6px", marginBottom: "10px" }}>
+                        {p.colors?.map((c, i) => (
+                            <div
+                            key={i}
+                            style={{
+                                width: "14px",
+                                height: "14px",
+                                borderRadius: "50%",
+                                backgroundImage: `url(${c})`,
+                                backgroundSize: "cover",
+                                border: "1px solid #fff",
+                                cursor: "pointer"
+                            }}
+                            onMouseEnter={() =>
+                                setHoverImg(prev => ({ ...prev, [p.id]: c }))
+                            }
+                            onMouseLeave={() =>
+                                setHoverImg(prev => ({ ...prev, [p.id]: p.image }))
+                            }
+                            />
+                        ))}
+                        </div>
+
+
 
                       <p style={{ opacity: 0.6, fontSize: "14px" }}>
                         LKR {p.price}

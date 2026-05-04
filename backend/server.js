@@ -50,7 +50,13 @@ const verifyAdmin = (req, res, next) => {
 app.get("/products", (req, res) => {
   db.query("SELECT * FROM products", (err, result) => {
     if (err) return res.json(err);
-    res.json(result);
+
+    const formatted = result.map(p => ({
+      ...p,
+      colors: p.colors ? JSON.parse(p.colors) : []
+    }));
+
+    res.json(formatted);
   });
 });
 
@@ -60,16 +66,16 @@ app.get("/", (req, res) => {
 });
 
 app.post("/products", verifyAdmin, (req, res) => {
-  const { name, price, image } = req.body;
+    const { name, price, image, description, colors } = req.body;
 
-  db.query(
-    "INSERT INTO products (name, price, image) VALUES (?, ?, ?)",
-    [name, price, image],
+    db.query(
+    "INSERT INTO products (name, price, image, description, colors) VALUES (?, ?, ?, ?, ?)",
+    [name, price, image, description, JSON.stringify(colors)],
     (err) => {
-      if (err) return res.status(500).send(err);
-      res.send("Product created");
+        if (err) return res.status(500).send(err);
+        res.send("Product created");
     }
-  );
+    );
 });
 
 app.delete("/products/:id", verifyAdmin, (req, res) => {

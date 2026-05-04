@@ -6,44 +6,56 @@ function ProductsAdmin() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
+  const [colors, setColors] = useState("");
 
   useEffect(() => {
     axios.get("https://victus-production.up.railway.app/products")
       .then(res => setProducts(res.data));
   }, []);
 
-  const addProduct = async () => {
-    if (!name || !price || !image) {
-        alert("Fill all fields");
-        return;
-    }
+ const addProduct = async () => {
+  if (!name || !price || !image) {
+    alert("Fill all fields");
+    return;
+  }
 
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-    try {
-        await axios.post("https://victus-production.up.railway.app/products", 
-        { name, price, image },
-        {
-            headers: {
-                Authorization: token
-            }
+  try {
+    await axios.post(
+      "https://victus-production.up.railway.app/products",
+      {
+        name,
+        price,
+        image,
+        description,
+        colors: colors.split(",") // 🔥 IMPORTANT
+      },
+      {
+        headers: {
+          Authorization: token
         }
+      }
     );
 
-        alert("Product added ✅");
+    alert("Product added ✅");
 
-        setName("");
-        setPrice("");
-        setImage("");
+    // reset fields
+    setName("");
+    setPrice("");
+    setImage("");
+    setDescription("");
+    setColors("");
 
-        const res = await axios.get("https://victus-production.up.railway.app/products");
-        setProducts(res.data);
+    const res = await axios.get("https://victus-production.up.railway.app/products");
+    setProducts(res.data);
 
-    } catch (err) {
-        console.log(err);
-        alert("Error adding product ❌");
-    }
-    };
+  } catch (err) {
+    console.log(err);
+    alert("Error adding product ❌");
+  }
+};
 
   const inputStyle = {
   width: "100%",
@@ -102,6 +114,22 @@ function ProductsAdmin() {
             onChange={e => setImage(e.target.value)}
             style={inputStyle}
         />
+
+        <input
+            placeholder="Colors (comma separated)"
+            value={colors}
+            onChange={e => setColors(e.target.value)}
+            style={inputStyle}
+        />
+
+        <textarea
+            placeholder="Description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            style={inputStyle}
+        />
+
+
 
         <button style={btnStyle} onClick={addProduct}>
             ➕ Add Product
