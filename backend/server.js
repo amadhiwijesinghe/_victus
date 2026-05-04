@@ -26,8 +26,6 @@ db.connect((err) => {
   console.log("Connected to MySQL ✅");
 });
 
-const jwt = require("jsonwebtoken");
-
 const verifyAdmin = (req, res, next) => {
   const token = req.headers.authorization;
 
