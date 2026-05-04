@@ -13,19 +13,32 @@ function ProductsAdmin() {
   }, []);
 
   const addProduct = async () => {
-    await axios.post("https://victus-production.up.railway.app/products", {
-      name,
-      price,
-      image
-    });
+    if (!name || !price || !image) {
+        alert("Fill all fields");
+        return;
+    }
 
-    setName("");
-    setPrice("");
-    setImage("");
+    try {
+        await axios.post("https://victus-production.up.railway.app/products", {
+        name,
+        price,
+        image
+        });
 
-    const res = await axios.get("https://victus-production.up.railway.app/products");
-    setProducts(res.data);
-  };
+        alert("Product added ✅");
+
+        setName("");
+        setPrice("");
+        setImage("");
+
+        const res = await axios.get("https://victus-production.up.railway.app/products");
+        setProducts(res.data);
+
+    } catch (err) {
+        console.log(err);
+        alert("Error adding product ❌");
+    }
+    };
 
   const inputStyle = {
   width: "100%",
