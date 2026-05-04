@@ -38,6 +38,42 @@ app.get("/", (req, res) => {
   res.send("VICTUS Backend Running 🚀");
 });
 
+app.post("/products", (req, res) => {
+  const { name, price, image } = req.body;
+
+  db.query(
+    "INSERT INTO products (name, price, image) VALUES (?, ?, ?)",
+    [name, price, image],
+    (err) => {
+      if (err) return res.status(500).send(err);
+      res.send("Product created");
+    }
+  );
+});
+
+app.delete("/products/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.query("DELETE FROM products WHERE id = ?", [id], (err) => {
+    if (err) return res.status(500).send(err);
+    res.send("Deleted");
+  });
+});
+
+app.put("/products/:id", (req, res) => {
+  const id = req.params.id;
+  const { name, price, image } = req.body;
+
+  db.query(
+    "UPDATE products SET name=?, price=?, image=? WHERE id=?",
+    [name, price, image, id],
+    (err) => {
+      if (err) return res.status(500).send(err);
+      res.send("Updated");
+    }
+  );
+});
+
 
 // ORDERS
 app.post("/orders", (req, res) => {

@@ -11,6 +11,31 @@ function Admin() {
       .catch(err => console.log(err));
   }, []);
 
+  const totalOrders = orders.length;
+
+  const pendingOrders = orders.filter(o => o.status === "Pending").length;
+
+  const revenue = orders.reduce((sum, o) => sum + Number(o.total), 0);
+
+  const cardStyle = {
+    flex: 1,
+    padding: "20px",
+    borderRadius: "16px",
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(0,255,204,0.1)",
+    backdropFilter: "blur(10px)"
+    };
+
+    const labelStyle = {
+    fontSize: "13px",
+    opacity: 0.6
+    };
+
+    const valueStyle = {
+    marginTop: "5px",
+    fontSize: "24px",
+    fontWeight: "700"
+    };
  return (
   <div
     style={{
@@ -34,66 +59,106 @@ function Admin() {
       Admin Dashboard
     </h1>
 
+    <div style={{
+        display: "flex",
+        gap: "20px",
+        marginBottom: "30px"
+        }}>
+
+        {/* TOTAL ORDERS */}
+        <div style={cardStyle}>
+            <p style={labelStyle}>Total Orders</p>
+            <h2 style={valueStyle}>{totalOrders}</h2>
+        </div>
+
+        {/* PENDING */}
+        <div style={cardStyle}>
+            <p style={labelStyle}>Pending</p>
+            <h2 style={{ ...valueStyle, color: "#ffaa00" }}>{pendingOrders}</h2>
+        </div>
+
+        {/* REVENUE */}
+        <div style={cardStyle}>
+            <p style={labelStyle}>Revenue</p>
+            <h2 style={{ ...valueStyle, color: "#00ffcc" }}>
+            LKR {revenue}
+            </h2>
+        </div>
+
+        </div>
+
     {orders.length === 0 ? (
       <p>No orders yet</p>
     ) : (
       orders.map(order => (
         <div
-          key={order.id}
-          style={{
+            key={order.id}
+            style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "20px",
             marginBottom: "20px",
             padding: "20px",
-            borderRadius: "16px",
+            borderRadius: "18px",
             background: "rgba(255,255,255,0.05)",
-            backdropFilter: "blur(12px)",
+            backdropFilter: "blur(15px)",
             border: "1px solid rgba(0,255,204,0.1)",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.6)"
-          }}
+            boxShadow: "0 10px 30px rgba(0,0,0,0.6)",
+            transition: "0.3s"
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
+            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
         >
-          {/* HEADER */}
-          <div style={{ marginBottom: "10px" }}>
-            <h3 style={{ margin: 0, fontWeight: "700" }}>{order.name}</h3>
-            <p style={{ opacity: 0.7, fontSize: "13px" }}>
-              {new Date(order.created_at).toLocaleString()}
-            </p>
-          </div>
 
-          {/* CUSTOMER */}
-          <div style={{ marginBottom: "10px" }}>
-            <h3>{order.name}</h3>
+            {/* 🔵 LEFT SIDE */}
+            <div style={{ maxWidth: "70%" }}>
+            
+            <h3 style={{ margin: 0 }}>{order.name}</h3>
+
+            <p style={{ opacity: 0.6, fontSize: "12px" }}>
+                {new Date(order.created_at).toLocaleString()}
+            </p>
+
             <p>📞 {order.phone1}</p>
             <p>📍 {order.address}</p>
-          </div>
 
-          <p style={{
-            fontSize: "12px",
-            marginTop: "5px",
-            color: order.status === "Delivered" ? "#00ffcc" : "#ffaa00"
+            {/* STATUS BADGE */}
+            <span style={{
+                padding: "4px 10px",
+                borderRadius: "20px",
+                fontSize: "12px",
+                background: order.status === "Delivered"
+                ? "rgba(0,255,204,0.2)"
+                : "rgba(255,170,0,0.2)",
+                color: order.status === "Delivered"
+                ? "#00ffcc"
+                : "#ffaa00"
             }}>
-            {order.status}
-            </p>
+                {order.status}
+            </span>
 
-          <button
-            style={{
-                marginTop: "10px",
-                padding: "8px 12px",
-                border: "none",
-                borderRadius: "8px",
-                background: "#ff4d4d",
-                color: "#fff",
-                cursor: "pointer"
-            }}
-            onClick={async () => {
-                await axios.delete(`https://victus-production.up.railway.app/orders/${order.id}`);
-                setOrders(orders.filter(o => o.id !== order.id));
-            }}
-            >
-            Delete
-            </button>
+            {/* BUTTONS */}
+            <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
 
-            <button
+                <button
                 style={{
-                    marginTop: "10px",
+                    padding: "8px 12px",
+                    border: "none",
+                    borderRadius: "8px",
+                    background: "#ff4d4d",
+                    color: "#fff",
+                    cursor: "pointer"
+                }}
+                onClick={async () => {
+                    await axios.delete(`https://victus-production.up.railway.app/orders/${order.id}`);
+                    setOrders(orders.filter(o => o.id !== order.id));
+                }}
+                >
+                Delete
+                </button>
+
+                <button
+                style={{
                     padding: "8px 12px",
                     border: "none",
                     borderRadius: "8px",
@@ -118,24 +183,29 @@ function Admin() {
                 {order.status === "Pending" ? "Mark Delivered" : "Mark Pending"}
                 </button>
 
-          {/* ITEMS */}
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Items:</strong>
-            <ul style={{ marginTop: "5px", paddingLeft: "18px" }}>
-              {JSON.parse(order.items).map((item, i) => (
-                <li key={i}>
-                  {item.name} x{item.qty}
-                </li>
-              ))}
-            </ul>
-          </div>
+            </div>
 
-          {/* TOTAL */}
-          <div style={{ textAlign: "right", fontWeight: "700", color: "#00ffcc" }}>
-            LKR {order.total}
-          </div>
+            </div>
+
+            {/* 🟣 RIGHT SIDE */}
+            <div style={{ textAlign: "right" }}>
+
+            <p style={{ fontSize: "13px", opacity: 0.7 }}>Items</p>
+
+            {JSON.parse(order.items).map((item, i) => (
+                <p key={i}>
+                {item.name} x{item.qty}
+                </p>
+            ))}
+
+            <h3 style={{ color: "#00ffcc", marginTop: "10px" }}>
+                LKR {order.total}
+            </h3>
+
+            </div>
+
         </div>
-      ))
+        ))
     )}
   </div>
 );

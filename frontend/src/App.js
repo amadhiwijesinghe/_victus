@@ -4,6 +4,7 @@ import axios from "axios";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Admin from "./pages/admin";
+import ProductsAdmin from "./pages/ProductsAdmin";
 
 function App() {
 
@@ -678,6 +679,9 @@ useEffect(() => {
 
         {/* ADMIN PAGE */}
         <Route path="/admin" element={<Admin />} />
+
+        {/* ADMIN PRODUCT PAGE */}
+        <Route path="/admin/products" element={<ProductsAdmin />} />
       </Routes>
     </BrowserRouter>
 
