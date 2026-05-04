@@ -5,6 +5,7 @@ const cors = require("cors");
 const mysql = require("mysql2");
 
 const app = express();
+const jwt = require("jsonwebtoken");
 app.use(cors());
 app.use(express.json());
 
@@ -74,6 +75,22 @@ app.put("/products/:id", (req, res) => {
   );
 });
 
+// JWT
+app.post("/admin/login", (req, res) => {
+  const { password } = req.body;
+
+  if (password === process.env.ADMIN_PASSWORD) {
+    const token = jwt.sign(
+      { role: "admin" },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
+    res.json({ token });
+  } else {
+    res.status(401).send("Unauthorized");
+  }
+});
 
 // ORDERS
 app.post("/orders", (req, res) => {
