@@ -516,7 +516,7 @@ useEffect(() => {
             CUSTOMER DETAILS
           </h4>
 
-          <div style={{ padding: "0 20px", marginTop: "15px" }}>
+          <div style={{ marginTop: "15px" }}>
             <input
               placeholder="Your Name"
               value={name}
