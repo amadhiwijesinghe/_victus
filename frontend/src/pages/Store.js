@@ -228,9 +228,6 @@ function Store() {
                             onMouseEnter={() =>
                                 setHoverImg(prev => ({ ...prev, [p.id]: c }))
                             }
-                            onMouseLeave={() =>
-                                setHoverImg(prev => ({ ...prev, [p.id]: p.image }))
-                            }
                             />
                         ))}
                         </div>
