@@ -14,12 +14,28 @@ function App() {
   const [phone2, setPhone2] = useState("");
   const [address, setAddress] = useState("");
 
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     axios
       .get("https://victus-production.up.railway.app/products")
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+    setLoaded(true);
+  }, []);
+
+useEffect(() => {
+  if (loaded) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+}, [cart, loaded]);
 
   return (
   <div style={{ fontFamily: "Outfit, sans-serif", background: "#000", color: "#fff" }}>
@@ -408,6 +424,8 @@ function App() {
                           : i
                       ));
                     }}
+                      onMouseDown={(e) => e.currentTarget.style.transform = "scale(0.9)"}
+                      onMouseUp={(e) => e.currentTarget.style.transform = "scale(1)"}
                   >
                     –
                   </button>
@@ -432,6 +450,8 @@ function App() {
                           : i
                       ));
                     }}
+                      onMouseDown={(e) => e.currentTarget.style.transform = "scale(0.9)"}
+                      onMouseUp={(e) => e.currentTarget.style.transform = "scale(1)"}
                   >
                     +
                   </button>
@@ -496,12 +516,13 @@ function App() {
             CUSTOMER DETAILS
           </h4>
 
-          <div style={{ marginTop: "15px" }}>
+          <div style={{ padding: "0 20px", marginTop: "15px" }}>
             <input
               placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               style={{
+                display: "block",
                 width: "100%",
                 marginBottom: "10px",
                 padding: "12px",
@@ -511,7 +532,8 @@ function App() {
                 color: "#fff",
                 outline: "none",
                 fontSize: "14px",
-                transition: "0.2s"
+                transition: "0.2s",
+                boxSizing: "border-box"
               }}
             />
 
@@ -587,6 +609,9 @@ function App() {
 
             onMouseEnter={(e) => e.target.style.transform = "scale(1.03)"}
             onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+
+            onMouseDown={(e) => e.currentTarget.style.transform = "scale(0.95)"}
+            onMouseUp={(e) => e.currentTarget.style.transform = "scale(1.03)"}
 
              onClick={async () => {
               if (cart.length === 0) return;
