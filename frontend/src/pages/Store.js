@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import "../App.css";
+import logo from "../assets/logo.png";
 
 
 function Store() {
@@ -103,6 +104,18 @@ function Store() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1 }}
                 >
+
+                  {/* 🔥 LOGO */}
+                  <img
+                    src={logo}
+                    alt="VICTUS Logo"
+                    style={{
+                      width: "120px",
+                      marginBottom: "20px",
+                      filter: "drop-shadow(0 0 20px rgba(0,255,204,0.6))"
+                    }}
+                  />
+
                   <h1
                     style={{
                       fontSize: "clamp(60px, 10vw, 120px)",
