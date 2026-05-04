@@ -26,8 +26,30 @@ db.connect((err) => {
   console.log("Connected to MySQL ✅");
 });
 
+const jwt = require("jsonwebtoken");
+
+const verifyAdmin = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(403).send("No token");
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.role !== "admin") {
+      return res.status(403).send("Not admin");
+    }
+
+    next();
+  } catch (err) {
+    return res.status(403).send("Invalid token");
+  }
+};
+
 // PRODUCTS
-app.get("/products", (req, res) => {
+app.get("/products", verifyAdmin, (req, res) => {
   db.query("SELECT * FROM products", (err, result) => {
     if (err) return res.json(err);
     res.json(result);
@@ -35,11 +57,11 @@ app.get("/products", (req, res) => {
 });
 
 
-app.get("/", (req, res) => {
+app.get("/", verifyAdmin, (req, res) => {
   res.send("VICTUS Backend Running 🚀");
 });
 
-app.post("/products", (req, res) => {
+app.post("/products", verifyAdmin, (req, res) => {
   const { name, price, image } = req.body;
 
   db.query(
@@ -52,7 +74,7 @@ app.post("/products", (req, res) => {
   );
 });
 
-app.delete("/products/:id", (req, res) => {
+app.delete("/products/:id", verifyAdmin, (req, res) => {
   const id = req.params.id;
 
   db.query("DELETE FROM products WHERE id = ?", [id], (err) => {
@@ -61,7 +83,7 @@ app.delete("/products/:id", (req, res) => {
   });
 });
 
-app.put("/products/:id", (req, res) => {
+app.put("/products/:id", verifyAdmin, (req, res) => {
   const id = req.params.id;
   const { name, price, image } = req.body;
 
@@ -76,7 +98,7 @@ app.put("/products/:id", (req, res) => {
 });
 
 // JWT
-app.post("/admin/login", (req, res) => {
+app.post("/admin/login", verifyAdmin, (req, res) => {
   const { password } = req.body;
 
   if (password === process.env.ADMIN_PASSWORD) {
@@ -93,7 +115,7 @@ app.post("/admin/login", (req, res) => {
 });
 
 // ORDERS
-app.post("/orders", (req, res) => {
+app.post("/orders", verifyAdmin, (req, res) => {
   const { items, total, name, phone1, phone2, address } = req.body;
 
   const query = `
@@ -111,14 +133,14 @@ app.post("/orders", (req, res) => {
   );
 });
 
-app.get("/orders", (req, res) => {
+app.get("/orders", verifyAdmin, (req, res) => {
   db.query("SELECT * FROM orders ORDER BY created_at DESC", (err, result) => {
     if (err) return res.status(500).send(err);
     res.json(result);
   });
 });
 
-app.put("/orders/:id", (req, res) => {
+app.put("/orders/:id", verifyAdmin, (req, res) => {
   const id = req.params.id;
   const { status } = req.body;
 
@@ -132,7 +154,7 @@ app.put("/orders/:id", (req, res) => {
   );
 });
 
-app.delete("/orders/:id", (req, res) => {
+app.delete("/orders/:id", verifyAdmin, (req, res) => {
   const id = req.params.id;
 
   db.query("DELETE FROM orders WHERE id = ?", [id], (err) => {
@@ -142,7 +164,7 @@ app.delete("/orders/:id", (req, res) => {
 });
 
 // ADMIN LOGIN
-app.post("/admin/login", (req, res) => {
+app.post("/admin/login", verifyAdmin, (req, res) => {
   const { password } = req.body;
 
   if (password === process.env.ADMIN_PASSWORD) {

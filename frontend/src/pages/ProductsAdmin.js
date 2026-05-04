@@ -18,12 +18,17 @@ function ProductsAdmin() {
         return;
     }
 
+    const token = localStorage.getItem("token");
+
     try {
-        await axios.post("https://victus-production.up.railway.app/products", {
-        name,
-        price,
-        image
-        });
+        await axios.post("https://victus-production.up.railway.app/products", 
+        { name, price, image },
+        {
+            headers: {
+                Authorization: token
+            }
+        }
+    );
 
         alert("Product added ✅");
 
@@ -111,7 +116,16 @@ function ProductsAdmin() {
           <p>{p.name} - {p.price}</p>
 
           <button onClick={async () => {
-            await axios.delete(`https://victus-production.up.railway.app/products/${p.id}`);
+           const token = localStorage.getItem("token");
+
+            await axios.delete(
+            `https://victus-production.up.railway.app/products/${p.id}`,
+            {
+                headers: {
+                Authorization: token
+                }
+            }
+            );
             setProducts(products.filter(x => x.id !== p.id));
           }}>
             Delete
