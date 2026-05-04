@@ -47,7 +47,7 @@ const verifyAdmin = (req, res, next) => {
 };
 
 // PRODUCTS
-app.get("/products", verifyAdmin, (req, res) => {
+app.get("/products", (req, res) => {
   db.query("SELECT * FROM products", (err, result) => {
     if (err) return res.json(err);
     res.json(result);
@@ -55,7 +55,7 @@ app.get("/products", verifyAdmin, (req, res) => {
 });
 
 
-app.get("/", verifyAdmin, (req, res) => {
+app.get("/", (req, res) => {
   res.send("VICTUS Backend Running 🚀");
 });
 
@@ -130,7 +130,7 @@ app.post("/orders", verifyAdmin, (req, res) => {
   );
 });
 
-app.get("/orders", verifyAdmin, (req, res) => {
+app.get("/orders", (req, res) => {
   db.query("SELECT * FROM orders ORDER BY created_at DESC", (err, result) => {
     if (err) return res.status(500).send(err);
     res.json(result);
@@ -158,17 +158,6 @@ app.delete("/orders/:id", verifyAdmin, (req, res) => {
     if (err) return res.status(500).send(err);
     res.send("Deleted");
   });
-});
-
-// ADMIN LOGIN
-app.post("/admin/login", verifyAdmin, (req, res) => {
-  const { password } = req.body;
-
-  if (password === process.env.ADMIN_PASSWORD) {
-    return res.json({ success: true });
-  } else {
-    return res.status(401).json({ success: false });
-  }
 });
 
 
