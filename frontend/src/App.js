@@ -21,6 +21,7 @@ function App() {
 
     {/* 🛒 FLOATING CART */}
     <div
+      id="cart-icon"
       style={{
         position: "fixed",
         top: "20px",
@@ -34,7 +35,15 @@ function App() {
         cursor: "pointer",
         zIndex: 3000
       }}
-      onClick={() => setCartOpen(true)}
+      onClick={() => {
+        setCartOpen(true);
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "scale(1.1)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
+      }}
     >
       🛒 {cart.reduce((total, item) => total + item.qty, 0)}
     </div>
@@ -195,7 +204,42 @@ function App() {
                 cursor: "pointer",
                 boxShadow: "0 0 15px rgba(0,255,204,0.3)"
               }}
-              onClick={() => {
+              onClick={(e) => {
+                const card = e.currentTarget.parentElement;
+                const img = card.querySelector("img");
+                const cartIcon = document.getElementById("cart-icon");
+
+                if (img && cartIcon) {
+                  const imgRect = img.getBoundingClientRect();
+                  const cartRect = cartIcon.getBoundingClientRect();
+
+                  const clone = img.cloneNode(true);
+
+                  clone.style.position = "fixed";
+                  clone.style.left = imgRect.left + "px";
+                  clone.style.top = imgRect.top + "px";
+                  clone.style.width = imgRect.width + "px";
+                  clone.style.height = imgRect.height + "px";
+                  clone.style.borderRadius = "12px";
+                  clone.style.transition = "all 0.8s cubic-bezier(0.65, -0.2, 0.25, 1.4)";
+                  clone.style.zIndex = "5000";
+
+                  document.body.appendChild(clone);
+
+                  setTimeout(() => {
+                    clone.style.left = cartRect.left + "px";
+                    clone.style.top = cartRect.top + "px";
+                    clone.style.width = "20px";
+                    clone.style.height = "20px";
+                    clone.style.opacity = "0.5";
+                  }, 10);
+
+                  setTimeout(() => {
+                    clone.remove();
+                  }, 800);
+                }
+
+                // ✅ KEEP YOUR ORIGINAL LOGIC
                 const existing = cart.find(item => item.id === p.id);
                 if (existing) {
                   setCart(cart.map(item =>
@@ -232,17 +276,20 @@ function App() {
     )}
 
     {/* 🛒 CART PANEL */}
-    <div
+    <motion.div
+      initial={{ x: 400 }}
+      animate={{ x: cartOpen ? 0 : 400 }}
+      transition={{ type: "spring", stiffness: 120, damping: 20 }}
+
       style={{
         position: "fixed",
         top: 0,
-        right: cartOpen ? "0" : "-360px",
+        right: 0,
         width: "360px",
         height: "100%",
         background: "linear-gradient(180deg, rgba(10,10,10,0.95), rgba(0,0,0,0.98))",
         borderLeft: "1px solid rgba(0,255,204,0.15)",
         color: "#fff",
-        transition: "0.4s cubic-bezier(0.77, 0, 0.18, 1)",
         zIndex: 2000,
         display: "flex",
         flexDirection: "column",
@@ -447,9 +494,9 @@ function App() {
         </div>
       )}
 
+      </motion.div>
     </div>
 
-  </div>
 );
 }
 
