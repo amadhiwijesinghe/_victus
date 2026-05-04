@@ -627,7 +627,19 @@ function Store() {
 
                         const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-                        // 🔥 SAVE ORDER
+                        // WHATSAPP MESSAGE
+                        const text =
+                          `VICTUS Order:\n\n` +
+                          cart
+                            .map(item => `${item.name} x${item.qty} - LKR ${item.price * item.qty}`)
+                            .join("\n") +
+                          `\n\nTotal: LKR ${total}`;
+
+                        const url = `https://wa.me/947XXXXXXXX?text=${encodeURIComponent(text)}`;
+
+                        window.location.href = url;
+
+                         // 🔥 SAVE ORDER
                         try {
                           await axios.post("https://victus-production.up.railway.app/orders", {
                             items: cart,
@@ -640,18 +652,6 @@ function Store() {
                         } catch (err) {
                           console.log("Order save failed", err);
                         }
-
-                        // WHATSAPP MESSAGE
-                        const text =
-                          `VICTUS Order:\n\n` +
-                          cart
-                            .map(item => `${item.name} x${item.qty} - LKR ${item.price * item.qty}`)
-                            .join("\n") +
-                          `\n\nTotal: LKR ${total}`;
-
-                        const url = `https://wa.me/947XXXXXXXX?text=${encodeURIComponent(text)}`;
-
-                        window.open(url, "_blank");
 
                         setCart([]);
                       }}
