@@ -249,8 +249,8 @@ body {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+::-webkit-scrollbar {
+  width: 6px;
 }
 
 ::-webkit-scrollbar-thumb {

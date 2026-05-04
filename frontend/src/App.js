@@ -108,10 +108,18 @@ function App() {
             boxShadow: "0 0 25px rgba(0,255,204,0.5)",
             transition: "0.3s"
           }}
-          onMouseEnter={(e) => e.target.style.transform = "scale(1.1)"}
-          onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
-          onClick={() => {
-            document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+            onMouseEnter={(e) => {
+              e.target.style.transform = "scale(1.08)";
+              e.target.style.boxShadow = "0 0 30px rgba(0,255,204,0.7)";
+            }}
+
+            onMouseLeave={(e) => {
+              e.target.style.transform = "scale(1)";
+              e.target.style.boxShadow = "0 0 25px rgba(0,255,204,0.5)";
+            }}
+
+            onClick={() => {
+              document.getElementById("products").scrollIntoView({ behavior: "smooth" });
           }}
         >
           SHOP NOW
@@ -138,18 +146,33 @@ function App() {
               padding: "15px",
               border: "1px solid rgba(0,255,204,0.1)",
               transition: "0.3s",
-              cursor: "pointer"
+              cursor: "pointer",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.5)"
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-10px)";
               e.currentTarget.style.boxShadow = "0 15px 40px rgba(0,255,204,0.3)";
+
+              const img = e.currentTarget.querySelector("img");
+              if (img) img.style.transform = "scale(1.08)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
               e.currentTarget.style.boxShadow = "none";
+
+              const img = e.currentTarget.querySelector("img");
+              if (img) img.style.transform = "scale(1)";
             }}
           >
-            <img src={p.image} alt="" style={{ width: "100%", borderRadius: "12px" }} />
+            <img 
+              src={p.image} 
+              alt="" 
+              style={{ 
+                width: "100%", 
+                borderRadius: "12px",
+                transition: "0.3s"
+              }} 
+            />
 
             <h3 style={{ fontWeight: "700", letterSpacing: "1px", fontSize: "16px" }}>
               {p.name}
@@ -366,7 +389,9 @@ function App() {
 
               {/* RIGHT */}
               <div style={{ textAlign: "right" }}>
-                <strong>LKR {item.price * item.qty}</strong>
+                <strong style={{ fontSize: "14px" }}>
+                  LKR {item.price * item.qty}
+                </strong>
 
                 <div>
                   <button
@@ -413,7 +438,7 @@ function App() {
               fontWeight: "700",
               cursor: "pointer"
             }}
-            
+
             onMouseEnter={(e) => e.target.style.transform = "scale(1.03)"}
             onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
           >
