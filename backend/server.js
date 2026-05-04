@@ -105,11 +105,10 @@ app.post("/admin/login", (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );
-
-    res.json({ token });
-  } else {
-    res.status(401).send("Unauthorized");
+    return res.json({ token });
   }
+
+  return res.status(401).send("Unauthorized");
 });
 
 // ORDERS
