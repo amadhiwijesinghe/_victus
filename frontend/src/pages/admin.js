@@ -65,6 +65,14 @@ function Admin() {
             <p>📍 {order.address}</p>
           </div>
 
+          <p style={{
+            fontSize: "12px",
+            marginTop: "5px",
+            color: order.status === "Delivered" ? "#00ffcc" : "#ffaa00"
+            }}>
+            {order.status}
+            </p>
+
           <button
             style={{
                 marginTop: "10px",
@@ -82,6 +90,33 @@ function Admin() {
             >
             Delete
             </button>
+
+            <button
+                style={{
+                    marginTop: "10px",
+                    padding: "8px 12px",
+                    border: "none",
+                    borderRadius: "8px",
+                    background: order.status === "Delivered" ? "#444" : "#00ffcc",
+                    color: "#000",
+                    cursor: "pointer"
+                }}
+                onClick={async () => {
+                    const newStatus =
+                    order.status === "Pending" ? "Delivered" : "Pending";
+
+                    await axios.put(
+                    `https://victus-production.up.railway.app/orders/${order.id}`,
+                    { status: newStatus }
+                    );
+
+                    setOrders(orders.map(o =>
+                    o.id === order.id ? { ...o, status: newStatus } : o
+                    ));
+                }}
+                >
+                {order.status === "Pending" ? "Mark Delivered" : "Mark Pending"}
+                </button>
 
           {/* ITEMS */}
           <div style={{ marginBottom: "10px" }}>

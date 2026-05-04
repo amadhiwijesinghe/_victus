@@ -65,6 +65,20 @@ app.get("/orders", (req, res) => {
   });
 });
 
+app.put("/orders/:id", (req, res) => {
+  const id = req.params.id;
+  const { status } = req.body;
+
+  db.query(
+    "UPDATE orders SET status = ? WHERE id = ?",
+    [status, id],
+    (err) => {
+      if (err) return res.status(500).send(err);
+      res.send("Status updated");
+    }
+  );
+});
+
 app.delete("/orders/:id", (req, res) => {
   const id = req.params.id;
 
@@ -73,6 +87,8 @@ app.delete("/orders/:id", (req, res) => {
     res.send("Deleted");
   });
 });
+
+
 
 
 
