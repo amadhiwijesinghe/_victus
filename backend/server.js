@@ -96,7 +96,7 @@ app.put("/products/:id", verifyAdmin, (req, res) => {
 });
 
 // JWT
-app.post("/admin/login", verifyAdmin, (req, res) => {
+app.post("/admin/login", (req, res) => {
   const { password } = req.body;
 
   if (password === process.env.ADMIN_PASSWORD) {
