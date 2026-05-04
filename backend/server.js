@@ -124,7 +124,16 @@ app.delete("/orders/:id", (req, res) => {
   });
 });
 
+// ADMIN LOGIN
+app.post("/admin/login", (req, res) => {
+  const { password } = req.body;
 
+  if (password === process.env.ADMIN_PASSWORD) {
+    return res.json({ success: true });
+  } else {
+    return res.status(401).json({ success: false });
+  }
+});
 
 
 

@@ -2,7 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Admin from "./pages/admin";
 import ProductsAdmin from "./pages/ProductsAdmin";
 import Store from "./pages/Store";
+import AdminLogin from "./pages/AdminLogin";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
 
@@ -20,6 +22,17 @@ function App() {
           <ProtectedRoute>
             <Admin />
           </ProtectedRoute>} />
+
+        {/* ADMIN LOGIN PAGE */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
 
         {/* ADMIN PRODUCT PAGE */}
         <Route path="/admin/products" element={
