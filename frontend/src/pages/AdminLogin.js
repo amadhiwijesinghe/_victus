@@ -13,10 +13,10 @@ function AdminLogin() {
         { password }
       );
 
-      if (res.data.success) {
-        localStorage.setItem("adminAuth", "true");
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
         navigate("/admin");
-      }
+        }
     } catch {
       alert("Wrong password");
     }

@@ -1,10 +1,11 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
-  const password = prompt("Enter admin password");
+  const token = localStorage.getItem("token");
 
-  if (password !== "Victus@2025$") {
-    return <h1 style={{ color: "white" }}>Access Denied</h1>;
+  if (!token) {
+    return <Navigate to="/admin/login" />;
   }
 
   return children;
