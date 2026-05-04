@@ -488,6 +488,23 @@ function App() {
 
             onMouseEnter={(e) => e.target.style.transform = "scale(1.03)"}
             onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+
+             onClick={() => {
+              if (cart.length === 0) return;
+
+              const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+              const text =
+                `VICTUS Order:\n\n` +
+                cart
+                  .map(item => `${item.name} x${item.qty} - LKR ${item.price * item.qty}`)
+                  .join("\n") +
+                `\n\nTotal: LKR ${total}`;
+
+              const url = `https://wa.me/94761234567?text=${encodeURIComponent(text)}`;
+
+              window.open(url, "_blank");
+            }}
           >
             🚀 Checkout
           </button>
