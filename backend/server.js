@@ -58,6 +58,22 @@ app.post("/orders", (req, res) => {
   );
 });
 
+app.get("/orders", (req, res) => {
+  db.query("SELECT * FROM orders ORDER BY created_at DESC", (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.json(result);
+  });
+});
+
+app.delete("/orders/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.query("DELETE FROM orders WHERE id = ?", [id], (err) => {
+    if (err) return res.status(500).send(err);
+    res.send("Deleted");
+  });
+});
+
 
 
 // ✅ START SERVER (always at bottom)
