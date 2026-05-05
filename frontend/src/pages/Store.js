@@ -19,6 +19,8 @@ function Store() {
     const [hoverIndex, setHoverIndex] = useState({});
     const [intervals, setIntervals] = useState({});
 
+    const [selectedSize, setSelectedSize] = useState({});
+
     useEffect(() => {
         axios
         .get("https://victus-production.up.railway.app/products")
@@ -258,7 +260,7 @@ function Store() {
                         {p.name}
                       </h3>
 
-                      <p style={{ fontSize: "12px", opacity: 0.6 }}>
+                      <p style={{ fontSize: "13px", opacity: 0.7, whiteSpace: "pre-line" }}>
                         {p.description}
                       </p>
 
@@ -278,6 +280,33 @@ function Store() {
                             />
                         ))}
                         </div>
+                      
+                      <div style={{ margin: "10px 0" }}>
+                      <p style={{ fontSize: "12px", opacity: 0.7 }}>Select Size:</p>
+
+                      <div style={{ display: "flex", gap: "8px", marginTop: "5px" }}>
+                        {["XS", "S", "M", "L", "XL"].map(size => (
+                          <div
+                            key={size}
+                            onClick={() =>
+                              setSelectedSize(prev => ({ ...prev, [p.id]: size }))
+                            }
+                            style={{
+                              padding: "6px 10px",
+                              borderRadius: "8px",
+                              border:
+                                selectedSize[p.id] === size
+                                  ? "2px solid #00ffcc"
+                                  : "1px solid rgba(255,255,255,0.2)",
+                              cursor: "pointer",
+                              fontSize: "12px"
+                            }}
+                          >
+                            {size}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
                       <p style={{ opacity: 0.6, fontSize: "14px" }}>
                         LKR {p.price}
@@ -297,6 +326,11 @@ function Store() {
                           boxShadow: "0 0 15px rgba(0,255,204,0.3)"
                         }}
                         onClick={(e) => {
+
+                            if (!selectedSize[p.id]) {
+                              alert("Please select size");
+                              return;
+                            }
                           const card = e.currentTarget.parentElement;
                           const img = card.querySelector("img");
                           const cartIcon = document.getElementById("cart-icon");
@@ -331,11 +365,12 @@ function Store() {
                             }, 800);
                           }
 
-                          // ✅ KEEP YOUR ORIGINAL LOGIC
-                          const existing = cart.find(item => item.id === p.id);
+                          const size = selectedSize[p.id];
+
+                          const existing = cart.find(item => item.id === p.id && item.size === size);
                           if (existing) {
                             setCart(cart.map(item =>
-                              item.id === p.id
+                              item.id === p.id && item.size === size
                                 ? { ...item, qty: item.qty + 1 }
                                 : item
                             ));
