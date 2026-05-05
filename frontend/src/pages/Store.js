@@ -752,7 +752,7 @@ function Store() {
                             .join("\n") +
                           `\n\nTotal: LKR ${total}`;
 
-                        const url = `https://wa.me/947XXXXXXXX?text=${encodeURIComponent(text)}`;
+                        const url = `https://wa.me/94769827219?text=${encodeURIComponent(text)}`;
 
                         window.location.href = url;
 
