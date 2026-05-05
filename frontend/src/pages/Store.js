@@ -375,8 +375,11 @@ function Store() {
                                 : item
                             ));
                           } else {
-                            setCart([...cart, { ...p, qty: 1 }]);
-                          }
+                              setCart([
+                                ...cart,
+                                { ...p, size: size, qty: 1 }
+                              ]);
+                            }
                         }}
                       >
                         ADD TO CART
@@ -502,7 +505,13 @@ function Store() {
                             />
 
                             <div>
-                              <h4 style={{ margin: 0, fontWeight: "700" }}>{item.name}</h4>
+
+                              <h4 style={{ margin: 0, fontWeight: "700" }}>
+                                {item.name}
+                              </h4>
+                              <p style={{ fontSize: "12px", opacity: 0.6 }}>
+                                Size: {item.size}
+                              </p>
                               <p style={{ fontSize: "12px", opacity: 0.6 }}>
                                 LKR {item.price}
                               </p>
@@ -525,7 +534,7 @@ function Store() {
                               }}
                               onClick={() => {
                                 setCart(cart.map(i =>
-                                  i.id === item.id
+                                  i.id === item.id && i.size === item.size
                                     ? { ...i, qty: Math.max(1, i.qty - 1) }
                                     : i
                                 ));
@@ -551,7 +560,7 @@ function Store() {
                               }}
                               onClick={() => {
                                 setCart(cart.map(i =>
-                                  i.id === item.id
+                                  i.id === item.id && i.size === item.size
                                     ? { ...i, qty: i.qty + 1 }
                                     : i
                                 ));
@@ -580,7 +589,7 @@ function Store() {
                                 cursor: "pointer"
                               }}
                               onClick={() => {
-                                setCart(cart.filter(i => i.id !== item.id));
+                                setCart(cart.filter(i => !(i.id === item.id && i.size === item.size)));
                               }}
                             >
                               <span style={{ color: "#ff4d4d", fontSize: "12px" }}>
@@ -739,7 +748,7 @@ function Store() {
                         const text =
                           `VICTUS Order:\n\n` +
                           cart
-                            .map(item => `${item.name} x${item.qty} - LKR ${item.price * item.qty}`)
+                            .map(item => `${item.name} (${item.size}) x${item.qty} - LKR ${item.price * item.qty}`)
                             .join("\n") +
                           `\n\nTotal: LKR ${total}`;
 
