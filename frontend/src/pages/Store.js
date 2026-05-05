@@ -106,10 +106,11 @@ function Store() {
 
                   {/* 🔥 LOGO */}
                   <img
-                    src="/images/logo.jpeg"
+                    src="/images/logo.png"
                     alt="VICTUS Logo"
                     style={{
-                      width: "120px",
+                      width: "200px",
+                      height: "200px",
                       marginBottom: "20px",
                       filter: "drop-shadow(0 0 20px rgba(0,255,204,0.6))",
                       transition: "0.3s"
