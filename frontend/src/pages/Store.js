@@ -621,9 +621,7 @@ function Store() {
                       margin: "15px 0"
                     }} />
 
-                    <p> Please fill your exact details that will be comfort for both you and us 😁
-
-                      Thank you 
+                    <p> Please fill your exact details that will be comfort for both you and us 😁🙏🖤
                     </p>
 
                     <h4 style={{
