@@ -16,7 +16,6 @@ function Store() {
     const [address, setAddress] = useState("");
 
     const [loaded, setLoaded] = useState(false);
-    const [hoverImg, setHoverImg] = useState({});
     const [hoverIndex, setHoverIndex] = useState({});
     const [intervals, setIntervals] = useState({});
 
