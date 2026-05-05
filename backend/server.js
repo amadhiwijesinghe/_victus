@@ -89,11 +89,11 @@ app.delete("/products/:id", verifyAdmin, (req, res) => {
 
 app.put("/products/:id", verifyAdmin, (req, res) => {
   const id = req.params.id;
-  const { name, price, image } = req.body;
+  const { name, price, image, description, colors } = req.body;
 
   db.query(
-    "UPDATE products SET name=?, price=?, image=? WHERE id=?",
-    [name, price, image, id],
+    "UPDATE products SET name=?, price=?, image=?, description=?, colors=? WHERE id=?",
+    [name, price, image, description, JSON.stringify(colors), id],
     (err) => {
       if (err) return res.status(500).send(err);
       res.send("Updated");
