@@ -17,6 +17,8 @@ function Store() {
 
     const [loaded, setLoaded] = useState(false);
     const [hoverImg, setHoverImg] = useState({});
+    const [hoverIndex, setHoverIndex] = useState({});
+    const [intervals, setIntervals] = useState({});
 
     useEffect(() => {
         axios
@@ -202,6 +204,25 @@ function Store() {
 
                         const img = e.currentTarget.querySelector("img");
                         if (img) img.style.transform = "scale(1.08)";
+
+                        // 🔥 START IMAGE SLIDE
+                        if (!p.colors || p.colors.length === 0) return;
+
+                        let index = 0;
+
+                        const interval = setInterval(() => {
+                          index = (index + 1) % p.colors.length;
+
+                          setHoverIndex(prev => ({
+                            ...prev,
+                            [p.id]: index
+                          }));
+                        }, 700); // speed
+
+                        setIntervals(prev => ({
+                          ...prev,
+                          [p.id]: interval
+                        }));
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = "translateY(0)";
@@ -209,10 +230,23 @@ function Store() {
 
                         const img = e.currentTarget.querySelector("img");
                         if (img) img.style.transform = "scale(1)";
+
+                        // 🔥 STOP SLIDE
+                        clearInterval(intervals[p.id]);
+
+                        setHoverIndex(prev => {
+                          const copy = { ...prev };
+                          delete copy[p.id];
+                          return copy;
+                        });
                       }}
                     >
                       <img 
-                        src={hoverImg[p.id] || p.image} 
+                          src={
+                            p.colors && hoverIndex[p.id] !== undefined
+                              ? p.colors[hoverIndex[p.id]]
+                              : p.image
+                          }
                         alt="" 
                         style={{ 
                             width: "100%", 
@@ -242,14 +276,9 @@ function Store() {
                                 border: "1px solid #fff",
                                 cursor: "pointer"
                             }}
-                            onMouseEnter={() =>
-                                setHoverImg(prev => ({ ...prev, [p.id]: c }))
-                            }
                             />
                         ))}
                         </div>
-
-
 
                       <p style={{ opacity: 0.6, fontSize: "14px" }}>
                         LKR {p.price}
